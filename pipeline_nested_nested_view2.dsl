@@ -44,6 +44,15 @@ def microservicesByGroup = config.microservices.groupBy { name,data -> data.grou
 //   }
 //}
 
+buildPipelineView("consumer") {
+    selectedJob('consumer_data_starter')
+    triggerOnlyLatestJob(true)
+    alwaysAllowManualTrigger(true)
+    showPipelineParameters(true)
+    showPipelineParametersInHeaders(true)
+    showPipelineDefinitionHeader(true)
+    startsWithParameters(true)
+}
 
 def createPipelineJob(name, data ) {
     pipelineJob("${name}") {
