@@ -56,7 +56,7 @@ nestedView('Build Pipeline') {
          def service_names_list = services.keySet() as List
          def s = ""
          service_names_list.collect { s += "'$it.code',"  }
-         s = s.substring(0, s.length()-1);
+         s = s.substring(0, s.length()-1)
 
          listView("${group}") {
             description('Shows the service build pipelines')
