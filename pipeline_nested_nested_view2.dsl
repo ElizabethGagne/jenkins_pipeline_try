@@ -5,7 +5,7 @@ def config = slurper.parse(readFileFromWorkspace('microservices2.dsl'))
 
 // create job for every microservice
 config.microservices.each { name, data ->
-  createFreeStyleJob(name,data)
+  createPipelineJob(name,data)
 }
 
 def microservicesByGroup = config.microservices.groupBy { name,data -> data.group } 
