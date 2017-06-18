@@ -61,7 +61,7 @@ nestedView('Build Pipeline') {
          println "creating view for group ${group} with jobs " + s
          println "creating view for group2 ${group} with jobs ${s}"
 
-         listView("${group}") {
+         listView(group) {
             description('Shows the service build pipelines')
             columns {
                 status()
