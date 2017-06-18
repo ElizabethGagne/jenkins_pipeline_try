@@ -53,7 +53,7 @@ nestedView('Build Pipeline') {
    }
    views {
       microservicesByGroup.each { group, services ->
-         def service_names = services.each {it.key}
+         def service_names = services.keySet() as List
          listView("${group}") {
             description('Shows the service build pipelines')
             columns {
