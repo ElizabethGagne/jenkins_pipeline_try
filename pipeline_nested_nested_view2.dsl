@@ -113,6 +113,7 @@ nestedView('Build Pipeline') {
             }
         }
    }
+}
 
 def createPipelineJob(name, data ) {
     pipelineJob("${name}") {
