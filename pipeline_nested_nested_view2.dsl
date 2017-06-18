@@ -73,7 +73,9 @@ nestedView('Build Pipeline') {
                 buildButton()
             }
             jobs {
-                names(s)
+                service_names_list.each{service_name ->
+                    name(service_name)
+                }
             }
          }
       }
