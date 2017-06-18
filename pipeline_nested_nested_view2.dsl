@@ -11,44 +11,71 @@ config.microservices.each { name, data ->
 def microservicesByGroup = config.microservices.groupBy { name,data -> data.group } 
 
 // create nested build pipeline view
-nestedView('Build Pipeline 2') {
-   description('Shows the service build pipelines')
-   columns {
-      status()
-      weather()
-   }
-   views {
-      microservicesByGroup.each { group, services ->
-         nestedView("${group}") {
-            description('Shows the service build pipelines')
-            columns {
-               status()
-               weather()
-            }
-            views {
-               def innerNestedView = delegate
-               services.each { name,data ->
-                  innerNestedView.buildPipelineView("${name}") {
-                     selectedJob("${name}")
-                     triggerOnlyLatestJob(true)
-                     alwaysAllowManualTrigger(true)
-                     showPipelineParameters(true)
-                     showPipelineParametersInHeaders(true)
-                     showPipelineDefinitionHeader(true)
-                     startsWithParameters(true)
-                  }
-               }
-            }
-         }
-      }
-   }
-}
+//nestedView('Build Pipeline 2') {
+//   description('Shows the service build pipelines')
+//   columns {
+//      status()
+//      weather()
+//   }
+//   views {
+//      microservicesByGroup.each { group, services ->
+//         nestedView("${group}") {
+//            description('Shows the service build pipelines')
+//            columns {
+//               status()
+//               weather()
+//            }
+//            views {
+//               def innerNestedView = delegate
+//               services.each { name,data ->
+//                  innerNestedView.buildPipelineView("${name}") {
+//                     selectedJob("${name}")
+//                     triggerOnlyLatestJob(true)
+//                     alwaysAllowManualTrigger(true)
+//                     showPipelineParameters(true)
+//                     showPipelineParametersInHeaders(true)
+//                     showPipelineDefinitionHeader(true)
+//                     startsWithParameters(true)
+//                  }
+//               }
+//            }
+//         }
+//      }
+//   }
+//}
 
 
 def createPipelineJob(name, data ) {
     pipelineJob("${name}") {
         description("${data.description}")
 
+        scm {
+            git {
+                remote {
+                  url("${data.url}")
+                }
+                branch("${data.branch}")
+            }
+        }
+
+        triggers {
+            scm('H/10 * * * *')
+        }
+        concurrentBuild(false)
+
+        parameters {
+            stringParam('PARAM1' , "", 'First param')
+            stringParam('PARAM2', "", 'Second param')
+            stringParam('PARAM3', "", 'Third param')
+       }
+
+        def runScript = readFileFromWorkspace("${data.scriptfile}")
+
+        definition {
+            cps {
+                script(runScript)
+            }
+        }
     }
 }
 
