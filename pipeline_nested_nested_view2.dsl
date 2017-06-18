@@ -45,16 +45,45 @@ def microservicesByGroup = config.microservices.groupBy { name,data -> data.grou
 //}
 
 // create nested build pipeline view
+//nestedView('Build Pipeline') {
+//   description('Shows the service build pipelines')
+//   columns {
+//      status()
+//      weather()
+//   }
+//   views {
+//      microservicesByGroup.each { group, services ->
+//         listView("${group}") {
+//            description('Shows the service build pipelines')
+//            columns {
+//                status()
+//                weather()
+//                name()
+//                lastSuccess()
+//                lastFailure()
+//                lastDuration()
+//                buildButton()
+//            }
+//            jobs {
+//
+//                services.each { name,data ->
+//                    name("${name}")
+//                }
+//            }
+//         }
+//      }
+//   }
+//}
+
 nestedView('Build Pipeline') {
-   description('Shows the service build pipelines')
+   description('Shows all microservices pipelines')
    columns {
       status()
       weather()
    }
    views {
-      microservicesByGroup.each { group, services ->
-         listView("${group}") {
-            description('Shows the service build pipelines')
+        listView('starter') {
+            description('Shows the starter build pipelines')
             columns {
                 status()
                 weather()
@@ -65,15 +94,25 @@ nestedView('Build Pipeline') {
                 buildButton()
             }
             jobs {
-                def innerNestedView = delegate
-                services.each { name,data ->
-                    name("${name}")
-                }
+                name('consumer_data_starter')
             }
-         }
-      }
+        }
+        listView('web') {
+            description('Shows the web build pipelines')
+            columns {
+                status()
+                weather()
+                name()
+                lastSuccess()
+                lastFailure()
+                lastDuration()
+                buildButton()
+            }
+            jobs {
+                name('consumer_web')
+            }
+        }
    }
-}
 
 def createPipelineJob(name, data ) {
     pipelineJob("${name}") {
