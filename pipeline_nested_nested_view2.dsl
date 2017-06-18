@@ -80,9 +80,7 @@ def createPipelineJob(name, data ) {
         }
 
         publishers {
-            data.downstreams.each { nextjob ->
-              downstream("${nextjob}", 'SUCCESS')
-           }
+            downstream(data.downstreams, 'SUCCESS')
         }
     }
 }
