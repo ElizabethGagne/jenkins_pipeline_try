@@ -44,14 +44,35 @@ def microservicesByGroup = config.microservices.groupBy { name,data -> data.grou
 //   }
 //}
 
-buildPipelineView("consumer") {
-    selectedJob('consumer_data_starter')
-    triggerOnlyLatestJob(true)
-    alwaysAllowManualTrigger(true)
-    showPipelineParameters(true)
-    showPipelineParametersInHeaders(true)
-    showPipelineDefinitionHeader(true)
-    startsWithParameters(true)
+// create nested build pipeline view
+nestedView('Build Pipeline') {
+   description('Shows the service build pipelines')
+   columns {
+      status()
+      weather()
+   }
+   views {
+      microservicesByGroup.each { group, services ->
+         listView("${group}") {
+            description('Shows the service build pipelines')
+            columns {
+                status()
+                weather()
+                name()
+                lastSuccess()
+                lastFailure()
+                lastDuration()
+                buildButton()
+            }
+            jobs {
+                def innerNestedView = delegate
+                services.each { name,data ->
+                    name("${name}")
+                }
+            }
+         }
+      }
+   }
 }
 
 def createPipelineJob(name, data ) {
