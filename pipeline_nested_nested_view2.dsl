@@ -69,7 +69,8 @@ def createPipelineJob(name, data ) {
             stringParam('PARAM3', "", 'Third param')
        }
 
-        def runScript = readFileFromWorkspace("${data.scriptfile}")
+        println "fetching file ${data.scriptfile}"
+        def runScript = readFileFromWorkspace(data.scriptfile)
 
         definition {
             cps {
