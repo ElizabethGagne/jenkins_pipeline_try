@@ -87,9 +87,9 @@ def createPipelineJob(name, data ) {
 
 def createFreeStyleJob(name,data) {
 
-  freeStyleJob("${name}-free") {
+  freeStyleJob("${name}") {
 
-    println "creating pipeline job ${name}-free with for url " + data.url
+    println "creating pipeline job ${name} with for url " + data.url
     scm {
       git {
         remote {
