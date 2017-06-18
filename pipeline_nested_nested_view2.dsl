@@ -21,36 +21,37 @@ nestedView('Build Pipeline') {
       microservicesByGroup.each { group, services ->
          def service_names_list = services.keySet() as List
 
-         listView(group) {
+         nestedView(group) {
             description('Shows the service build pipelines')
             columns {
-                status()
-                weather()
-                name()
-                lastSuccess()
-                lastFailure()
-                lastDuration()
-                buildButton()
+               status()
+               weather()
             }
-            jobs {
-                service_names_list.each{service_name ->
-                    name(service_name)
-                }
+            views {
+               def innerNestedView = delegate
+               innerNestedView.listView(group) {
+                  description('Shows the service build pipelines')
+                  columns {
+                     status()
+                     weather()
+                     name()
+                     lastSuccess()
+                     lastFailure()
+                     lastDuration()
+                     buildButton()
+                  }
+                  jobs {
+                     service_names_list.each{service_name ->
+                         name(service_name)
+                     }
+                  }
+               }
             }
          }
       }
    }
 }
 
-buildPipelineView('consumer') {
-    selectedJob('consumer_data_starter')
-    triggerOnlyLatestJob(true)
-    alwaysAllowManualTrigger(true)
-    showPipelineParameters(true)
-    showPipelineParametersInHeaders(true)
-    showPipelineDefinitionHeader(true)
-    startsWithParameters(true)
-}
 
 //nestedView('Build Pipeline') {
 //   description('Shows all microservices pipelines')
