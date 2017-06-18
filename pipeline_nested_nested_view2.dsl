@@ -72,7 +72,7 @@ nestedView('Build Pipeline') {
                 buildButton()
             }
             jobs {
-                names(s)
+                name('consumer_web')
             }
          }
       }
