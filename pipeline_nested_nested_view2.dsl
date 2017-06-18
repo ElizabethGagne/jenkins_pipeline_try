@@ -47,7 +47,7 @@ nestedView('Build Pipeline 2') {
 
 def createPipelineJob(name, data ) {
     pipelineJob("${name}") {
-        description(data.description)
+        description("${data.description}")
 
     }
 }
