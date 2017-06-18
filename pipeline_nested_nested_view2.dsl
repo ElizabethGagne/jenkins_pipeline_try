@@ -58,6 +58,8 @@ nestedView('Build Pipeline') {
          service_names_list.collect { s += "'$it',"  }
          s = s.substring(0, s.length()-1)
 
+         println "creating view for group ${group} with jobs " + s
+
          listView("${group}") {
             description('Shows the service build pipelines')
             columns {
