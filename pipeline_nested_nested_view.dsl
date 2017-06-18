@@ -65,7 +65,7 @@ def createBuildJob(name,data) {
     }
 
     steps {
-        echo "Build Step"
+        sh "echo Build Step"
       //maven {
       //  mavenInstallation('3.1.1')
         //goals('clean install')
