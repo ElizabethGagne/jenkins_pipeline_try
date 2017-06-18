@@ -78,6 +78,12 @@ def createPipelineJob(name, data ) {
                 script(runScript)
             }
         }
+
+        publishers {
+            data.downstreams.each { nextjob ->
+              downstream("${nextjob}", 'SUCCESS')
+           }
+        }
     }
 }
 
