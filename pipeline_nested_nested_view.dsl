@@ -65,10 +65,11 @@ def createBuildJob(name,data) {
     }
 
     steps {
-      maven {
-        mavenInstallation('3.1.1')
+        echo "Build Step"
+      //maven {
+      //  mavenInstallation('3.1.1')
         //goals('clean install')
-      }
+      //}
     }
 
     publishers {

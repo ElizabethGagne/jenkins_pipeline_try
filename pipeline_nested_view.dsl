@@ -51,13 +51,14 @@ def createBuildJob(name,data) {
     }
 
     steps {
-      maven {
-        mavenInstallation('3.1.1')
-      }
+      //maven {
+        //mavenInstallation('3.1.1')
+      //}
+      echo "Build Step"
     }
 
     publishers {
-      archiveJunit('/target/surefire-reports/*.xml')
+      //archiveJunit('/target/surefire-reports/*.xml')
       downstream("${name}-itest", 'SUCCESS')
     }
   }
