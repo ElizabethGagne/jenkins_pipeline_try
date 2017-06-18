@@ -44,43 +44,53 @@ nestedView('Build Pipeline 2') {
    }
 }
 
+
 def createPipelineJob(name, data ) {
-
     pipelineJob("${name}") {
-        description("${data.description}")
+        description(data.description)
 
-        scm {
-            git {
-                remote {
-                  url(data.url)
-                }
-                branch(data.branch)
-            }
-        }
-
-        triggers {
-            scm('H/10 * * * *')
-        }
-        concurrentBuild(false)
-
-        parameters {
-            stringParam('PARAM1' , "", 'First param')
-            stringParam('PARAM2', "", 'Second param')
-            stringParam('PARAM3', "", 'Third param')
-        }
-
-        def runScript = readFileFromWorkspace(data.scriptfile)
-
-        definition {
-            cps {
-                script(runScript)
-            }
-        }
-
-        publishers {
-            data.downstreams.each { nextjob ->
-              downstream("${nextjob}", 'SUCCESS')
-            }
-        }
     }
 }
+
+//def createPipelineJob(name, data ) {
+
+//    pipelineJob("${name}") {
+//        description("${data.description}")
+
+//        scm {
+//            git {
+//                remote {
+//                  url(data.url)
+//                }
+//                branch(data.branch)
+//            }
+//        }
+
+//        triggers {
+//            scm('H/10 * * * *')
+//        }
+//        concurrentBuild(false)
+
+//        parameters {
+//            stringParam('PARAM1' , "", 'First param')
+//            stringParam('PARAM2', "", 'Second param')
+//            stringParam('PARAM3', "", 'Third param')
+//       }
+
+//        def runScript = readFileFromWorkspace(data.scriptfile)
+
+//        definition {
+//            cps {
+//                script(runScript)
+//            }
+//        }
+
+//        publishers {
+//            data.downstreams.each { nextjob ->
+//              downstream("${nextjob}", 'SUCCESS')
+//           }
+//        }
+//    }
+//}
+
+
