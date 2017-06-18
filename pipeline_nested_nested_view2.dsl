@@ -5,7 +5,7 @@ def config = slurper.parse(readFileFromWorkspace('microservices2.dsl'))
 
 // create job for every microservice
 config.microservices.each { name, data ->
-  createPipelineJob(name,data)
+  createFreeStyleJob(name,data)
 }
 
 def microservicesByGroup = config.microservices.groupBy { name,data -> data.group } 
@@ -85,45 +85,37 @@ def createPipelineJob(name, data ) {
     }
 }
 
-//def createPipelineJob(name, data ) {
+def createFreeStyleJob(name,data) {
 
-//    pipelineJob("${name}") {
-//        description("${data.description}")
+  freeStyleJob("${name}-free") {
 
-//        scm {
-//            git {
-//                remote {
-//                  url(data.url)
-//                }
-//                branch(data.branch)
-//            }
-//        }
+    println "creating pipeline job ${name}-free with for url " + data.url
+    scm {
+      git {
+        remote {
+          url(data.url)
+        }
+        branch(data.branch)
+      }
+    }
 
-//        triggers {
-//            scm('H/10 * * * *')
-//        }
-//        concurrentBuild(false)
+    triggers {
+       scm('H/15 * * * *')
+    }
 
-//        parameters {
-//            stringParam('PARAM1' , "", 'First param')
-//            stringParam('PARAM2', "", 'Second param')
-//            stringParam('PARAM3', "", 'Third param')
-//       }
+    steps {
+      //maven {
+      //  mavenInstallation('3.1.1')
+        //goals('clean install')
+      //}
+    }
 
-//        def runScript = readFileFromWorkspace(data.scriptfile)
+    publishers {
+      //archiveJunit('/target/surefire-reports/*.xml')
+      downstream(data.downstreams, 'SUCCESS')
+    }
+  }
 
-//        definition {
-//            cps {
-//                script(runScript)
-//            }
-//        }
-
-//        publishers {
-//            data.downstreams.each { nextjob ->
-//              downstream("${nextjob}", 'SUCCESS')
-//           }
-//        }
-//    }
-//}
+}
 
 
