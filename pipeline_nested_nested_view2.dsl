@@ -47,7 +47,7 @@ def microservicesByGroup = config.microservices.groupBy { name,data -> data.grou
 
 def createPipelineJob(name, data ) {
     pipelineJob("${name}") {
-        println "creating pipeline job ${name} with description " + data.description
+        println "creating pipeline job ${name} with description " + data
         description("${data.description}")
 
         scm {
