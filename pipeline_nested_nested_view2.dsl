@@ -55,7 +55,7 @@ nestedView('Build Pipeline') {
       microservicesByGroup.each { group, services ->
          def service_names_list = services.keySet() as List
          def s = ""
-         service_names_list.collect { s += "'$it.code',"  }
+         service_names_list.collect { s += "'$it',"  }
          s = s.substring(0, s.length()-1)
 
          listView("${group}") {
