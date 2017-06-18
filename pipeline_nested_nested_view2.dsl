@@ -47,15 +47,15 @@ def microservicesByGroup = config.microservices.groupBy { name,data -> data.grou
 
 def createPipelineJob(name, data ) {
     pipelineJob("${name}") {
-        println "creating pipeline job ${name} with description " + data
-        description("${data.description}")
+        println "creating pipeline job ${name} with description " + data.description
+        description(data.description)
 
         scm {
             git {
                 remote {
-                  url("${data.url}")
+                  url(data.url)
                 }
-                branch("${data.branch}")
+                branch(data.branch)
             }
         }
 
@@ -70,7 +70,7 @@ def createPipelineJob(name, data ) {
             stringParam('PARAM3', "", 'Third param')
        }
 
-        println "fetching file ${data.scriptfile}"
+        println "fetching file " + data.scriptfile
         def runScript = readFileFromWorkspace(data.scriptfile)
 
         definition {
