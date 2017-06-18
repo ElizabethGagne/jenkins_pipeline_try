@@ -8,41 +8,7 @@ config.microservices.each { name, data ->
   createPipelineJob(name,data)
 }
 
-def microservicesByGroup = config.microservices.groupBy { name,data -> data.group } 
-
-// create nested build pipeline view
-//nestedView('Build Pipeline 2') {
-//   description('Shows the service build pipelines')
-//   columns {
-//      status()
-//      weather()
-//   }
-//   views {
-//      microservicesByGroup.each { group, services ->
-//         nestedView("${group}") {
-//            description('Shows the service build pipelines')
-//            columns {
-//               status()
-//               weather()
-//            }
-//            views {
-//               def innerNestedView = delegate
-//               services.each { name,data ->
-//                  innerNestedView.buildPipelineView("${name}") {
-//                     selectedJob("${name}")
-//                     triggerOnlyLatestJob(true)
-//                     alwaysAllowManualTrigger(true)
-//                     showPipelineParameters(true)
-//                     showPipelineParametersInHeaders(true)
-//                     showPipelineDefinitionHeader(true)
-//                     startsWithParameters(true)
-//                  }
-//               }
-//            }
-//         }
-//      }
-//   }
-//}
+def microservicesByGroup = config.microservices.groupBy { name,data -> data.group }
 
 // create nested build pipeline view
 nestedView('Build Pipeline') {
@@ -54,12 +20,6 @@ nestedView('Build Pipeline') {
    views {
       microservicesByGroup.each { group, services ->
          def service_names_list = services.keySet() as List
-         def s = service_names_list.join(", ")
-         //service_names_list.collect { s += "'$it',"  }
-         //s = s.substring(0, s.length()-1)
-
-         println "creating view for group ${group} with jobs " + s
-         println "creating view for group2 ${group} with jobs ${s}"
 
          listView(group) {
             description('Shows the service build pipelines')
@@ -80,6 +40,16 @@ nestedView('Build Pipeline') {
          }
       }
    }
+}
+
+buildPipelineView('consumer') {
+    selectedJob('consumer_data_starter')
+    triggerOnlyLatestJob(true)
+    alwaysAllowManualTrigger(true)
+    showPipelineParameters(true)
+    showPipelineParametersInHeaders(true)
+    showPipelineDefinitionHeader(true)
+    startsWithParameters(true)
 }
 
 //nestedView('Build Pipeline') {
