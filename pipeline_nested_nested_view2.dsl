@@ -3,7 +3,7 @@ def slurper = new ConfigSlurper()
 slurper.classLoader = this.class.classLoader
 def config = slurper.parse(readFileFromWorkspace('microservices2.dsl'))
 
-String mainFolder = 'TestFolder'
+def mainFolder = 'TestFolder'
 
 folder("$mainFolder") {
     description 'GeneGuide Microservices Delivery Pipeline Folder'
