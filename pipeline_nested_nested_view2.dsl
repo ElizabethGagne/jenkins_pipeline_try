@@ -43,46 +43,6 @@ nestedView('Build Pipeline') {
 }
 
 
-//nestedView('Build Pipeline') {
-//   description('Shows all microservices pipelines')
-//   columns {
-//      status()
-//      weather()
-//   }
-//   views {
-//        listView('starter') {
-//            description('Shows the starter build pipelines')
-//            columns {
-//                status()
-//                weather()
-//                name()
-//                lastSuccess()
-//                lastFailure()
-//                lastDuration()
-//                buildButton()
-//            }
-//            jobs {
-//                name('consumer_data_starter')
-//            }
-//        }
-//        listView('web') {
-//            description('Shows the web build pipelines')
-//            columns {
-//                status()
-//                weather()
-//                name()
-//                lastSuccess()
-//                lastFailure()
-//                lastDuration()
-//                buildButton()
-//            }
-//            jobs {
-//                name('consumer_web')
-//            }
-//        }
-//   }
-//}
-
 def createPipelineJob(name, data ) {
     pipelineJob("${name}") {
         println "creating pipeline job ${name} with description " + data.description
@@ -92,6 +52,7 @@ def createPipelineJob(name, data ) {
             git {
                 remote {
                   url(data.url)
+                  credentials('GitHub_Account_Creds')
                 }
                 branch(data.branch)
             }
@@ -104,10 +65,6 @@ def createPipelineJob(name, data ) {
 
         parameters {
             stringParam('DOWNSTREAMS' , data.downstreams, 'Downstream Jobs To Trigger')
-       }
-
-        steps {
-            shell('echo START')
         }
 
         def runScript = readFileFromWorkspace(data.scriptfile)
@@ -117,44 +74,7 @@ def createPipelineJob(name, data ) {
                 script(runScript)
             }
         }
-
-        publishers {
-            downstream(data.downstreams, 'SUCCESS')
-        }
     }
-}
-
-def createFreeStyleJob(name,data) {
-
-  freeStyleJob("${name}") {
-
-    println "creating pipeline job ${name} with for url " + data.url
-    scm {
-      git {
-        remote {
-          url(data.url)
-        }
-        branch(data.branch)
-      }
-    }
-
-    triggers {
-       scm('H/15 * * * *')
-    }
-
-    steps {
-      //maven {
-      //  mavenInstallation('3.1.1')
-        //goals('clean install')
-      //}
-    }
-
-    publishers {
-      //archiveJunit('/target/surefire-reports/*.xml')
-      downstream(data.downstreams, 'SUCCESS')
-    }
-  }
-
 }
 
 
