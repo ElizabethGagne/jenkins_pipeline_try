@@ -106,7 +106,10 @@ def createPipelineJob(name, data ) {
             stringParam('DOWNSTREAMS' , data.downstreams, 'Downstream Jobs To Trigger')
        }
 
-        println "fetching file " + data.scriptfile
+        steps {
+            shell('echo START')
+        }
+
         def runScript = readFileFromWorkspace(data.scriptfile)
 
         definition {
