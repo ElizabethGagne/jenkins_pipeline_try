@@ -29,7 +29,7 @@ nestedView(mainFolder + '/Build Pipeline') {
       microservicesByGroup.each { group, services ->
          def service_names_list = services.keySet() as List
          def innerNestedView = delegate
-         innerNestedView.listView(mainFolder + "/" + group) {
+         innerNestedView.listView(group) {
             description('Shows the service build pipelines')
             columns {
                 status()
