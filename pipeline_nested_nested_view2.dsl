@@ -3,13 +3,6 @@ def slurper = new ConfigSlurper()
 slurper.classLoader = this.class.classLoader
 def config = slurper.parse(readFileFromWorkspace('microservices2.dsl'))
 
-//def mainFolder = 'TestFolder'
-
-//folder("$mainFolder") {
-//    description 'TestFolder Microservices Delivery Pipeline Folder'
-//}
-
-
 
 // create job for every microservice
 config.microservices.each { name, data ->
