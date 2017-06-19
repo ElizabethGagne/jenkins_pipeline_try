@@ -42,7 +42,7 @@ nestedView(mainFolder + '/Build Pipeline') {
             }
             jobs {
                service_names_list.each{service_name ->
-                 name(mainFolder + "/" + service_name")
+                 name(mainFolder + "/" + service_name)
                }
             }
          }
