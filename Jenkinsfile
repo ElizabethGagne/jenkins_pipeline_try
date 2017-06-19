@@ -23,7 +23,9 @@ pipeline {
             }
         }
         stage('Trigger downstreams') {
-            parallel branches
+            steps {
+                parallel branches
+            }
         }
     }
 }
