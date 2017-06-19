@@ -8,7 +8,7 @@ microservices {
     downstreams = 'consumer_web'
   }
   consumer_web {
-    url = 'https://github.com/ElizabethGagne/jenkins_pipeline_try.git'
+    url = 'https://github.com/tek-mayo-jaguar/consumer-web.git'
     branch = 'master'
     group = 'webapp'
     scriptfile = 'Jenkinsfile2'
