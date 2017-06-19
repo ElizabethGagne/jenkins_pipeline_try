@@ -103,9 +103,7 @@ def createPipelineJob(name, data ) {
         concurrentBuild(false)
 
         parameters {
-            stringParam('PARAM1' , "", 'First param')
-            stringParam('PARAM2', "", 'Second param')
-            stringParam('PARAM3', "", 'Third param')
+            stringParam('DOWNSTREAMS' , data.downstreams, 'Downstream Jobs To Trigger')
        }
 
         println "fetching file " + data.scriptfile
