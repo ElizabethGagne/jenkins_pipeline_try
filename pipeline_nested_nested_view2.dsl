@@ -13,7 +13,7 @@ folder("$mainFolder") {
 
 // create job for every microservice
 config.microservices.each { name, data ->
-  createPipelineJob(name,data)
+  createPipelineJob(mainFolder,name,data)
 }
 
 def microservicesByGroup = config.microservices.groupBy { name,data -> data.group }
@@ -51,8 +51,8 @@ nestedView(mainFolder + '/Build Pipeline') {
 }
 
 
-def createPipelineJob(name, data ) {
-    pipelineJob(mainFolder + "/" + name) {
+def createPipelineJob(folder, name, data ) {
+    pipelineJob(folder + "/" + name) {
         println "creating pipeline job ${name} with description " + data.description
         description(data.description)
 
