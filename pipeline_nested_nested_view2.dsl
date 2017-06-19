@@ -3,23 +3,23 @@ def slurper = new ConfigSlurper()
 slurper.classLoader = this.class.classLoader
 def config = slurper.parse(readFileFromWorkspace('microservices2.dsl'))
 
-def mainFolder = 'TestFolder'
+//def mainFolder = 'TestFolder'
 
-folder("$mainFolder") {
-    description 'TestFolder Microservices Delivery Pipeline Folder'
-}
+//folder("$mainFolder") {
+//    description 'TestFolder Microservices Delivery Pipeline Folder'
+//}
 
 
 
 // create job for every microservice
 config.microservices.each { name, data ->
-  createPipelineJob(mainFolder,name,data)
+  createPipelineJob(name,data)
 }
 
 def microservicesByGroup = config.microservices.groupBy { name,data -> data.group }
 
 // create nested build pipeline view
-nestedView(mainFolder + '/Build Pipeline') {
+nestedView('Build Pipeline') {
    description('Shows the service build pipelines')
    columns {
       status()
@@ -29,7 +29,7 @@ nestedView(mainFolder + '/Build Pipeline') {
       microservicesByGroup.each { group, services ->
          def service_names_list = services.keySet() as List
          def innerNestedView = delegate
-         innerNestedView.listView(mainFolder + '/' + group) {
+         innerNestedView.listView(group) {
             description('Shows the service build pipelines')
             columns {
                 status()
@@ -42,7 +42,7 @@ nestedView(mainFolder + '/Build Pipeline') {
             }
             jobs {
                service_names_list.each{service_name ->
-                 name(mainFolder + "/" + service_name)
+                 name(service_name)
                }
             }
          }
@@ -51,8 +51,8 @@ nestedView(mainFolder + '/Build Pipeline') {
 }
 
 
-def createPipelineJob(folder, name, data ) {
-    pipelineJob(folder + "/" + name) {
+def createPipelineJob(name, data ) {
+    pipelineJob(name) {
         println "creating pipeline job ${name} with description " + data.description
         description(data.description)
 
