@@ -1,21 +1,18 @@
-pipeline {
-    agent any
-
-    stages {
-        stage('\u2776 Build') {
-            steps {
-                echo "\u2776 Build Step"
-            }
-        }
-        stage('\u2777 Test'){
-            steps {
-                 echo "\u2777 Test Step"
-            }
-        }
-        stage('\u2778 Deploy') {
-            steps {
-                 echo "\u2778 Deploy Step"
-            }
+node{
+    stage('\u2776 Build') {
+        steps {
+            echo "\u2776 Build Step"
         }
     }
+    stage('\u2777 Test'){
+        steps {
+             echo "\u2777 Test Step"
+        }
+    }
+    stage('\u2778 Deploy') {
+        steps {
+             echo "\u2778 Deploy Step"
+        }
+    }
+
 }
