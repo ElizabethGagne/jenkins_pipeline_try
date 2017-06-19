@@ -24,7 +24,9 @@ pipeline {
         }
         stage('Trigger downstreams') {
             steps {
-                parallel branches
+               build job: 'consumer_web', parameters: [[$class: 'StringParameterValue', name: 'PARAM1', value:
+                     'test1_param'], [$class: 'StringParameterValue', name:'PARAM2', value: 'test2_param'],
+                     [$class: 'StringParameterValue', name:'PARAM3', value: 'test3_param']]
             }
         }
     }
