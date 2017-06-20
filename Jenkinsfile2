@@ -1,16 +1,21 @@
 node{
+
+    git url: GIT_URL, branch: GIT_BRANCH, credentialsId: 'GitHub_Account_Creds'
+
     stage('\u2776 Build') {
         echo "\u2776 Build Step"
-        sh 'docker images'
-        //docker.image('maven:3.3.3-jdk-8').inside {
-        //    sh 'mvn clean package'
-        //}
+        sh 'mvn clean compile'
+        //step([$class: 'ArtifactArchiver', artifacts: '**/target/*.jar', fingerprint: true])
     }
     stage('\u2777 Test'){
         echo "\u2777 Test Step"
+        sh 'mvn test'
+        junit '**/target/surefire-reports/TEST-*.xml'
+        //step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
     }
-    stage('\u2778 Deploy') {
+    stage('\u2778 Deploy Artifact') {
         echo "\u2778 Deploy Step"
+        sh 'mvn deploy -DskipTests'
     }
 
 }

@@ -65,6 +65,8 @@ def createPipelineJob(name, data ) {
         concurrentBuild(false)
 
         parameters {
+            stringParam('GIT_URL', data.url, 'Git Url of the project to build')
+            stringParam('GIT_BRANCH', data.branch, 'Git Branch to pick')
             stringParam('DOWNSTREAMS' , data.downstreams, 'Downstream Jobs To Trigger')
         }
 

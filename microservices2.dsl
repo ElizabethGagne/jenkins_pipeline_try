@@ -1,6 +1,6 @@
 microservices {
-  consumer_data_starter {
-    url = 'https://github.com/ElizabethGagne/jenkins_pipeline_try.git'
+  parent {
+    url = 'https://github.com/tek-mayo-jaguar/jenkins_pipeline_try.git'
     branch = 'master'
     group = 'starter'
     scriptfile = 'Jenkinsfile'
