@@ -1,9 +1,10 @@
 node{
     stage('\u2776 Build') {
         echo "\u2776 Build Step"
-        docker.image('maven:3.3.3-jdk-8').inside {
-            sh 'mvn clean package'
-        }
+        sh 'docker images'
+        //docker.image('maven:3.3.3-jdk-8').inside {
+        //    sh 'mvn clean package'
+        //}
     }
     stage('\u2777 Test'){
         echo "\u2777 Test Step"
