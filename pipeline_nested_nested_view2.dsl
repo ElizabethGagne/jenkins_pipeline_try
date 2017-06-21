@@ -97,12 +97,16 @@ def createBuildPipelineJob(name, data ) {
                 script(runScript + commonScript)
             }
         }
+
+        publishers {
+            wsCleanup()
+        }
     }
 }
 
 def createDeployPipelineJob(name, data ) {
     pipelineJob(name) {
-        println "creating deploy pipeline job ${name} with description " + data.description
+        println "creating deploy pipeline job ${name} with description '" + data.description + "'"
         description(data.description)
 
         concurrentBuild(false)
@@ -121,6 +125,10 @@ def createDeployPipelineJob(name, data ) {
             cps {
                 script(runScript + commonScript)
             }
+        }
+
+        publishers {
+            wsCleanup()
         }
     }
 }
