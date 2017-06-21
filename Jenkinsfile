@@ -1,3 +1,5 @@
+import jenkins.model.*
+
 pipeline {
     agent any
     parameters {

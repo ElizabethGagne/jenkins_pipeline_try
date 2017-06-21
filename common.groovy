@@ -1,6 +1,3 @@
-import jenkins.model.*
-
-def stepsForParallel = [:]
 
 @NonCPS
 def jobs(jobRegexp) {
@@ -25,6 +22,7 @@ def transformIntoStep(jobFullName) {
 // Return a map of jobs of the Downstreams that needed to be called
 def getParallelStepsForDownstreamJobs(listOfDownstreamJobs) {
 
+    def stepsForParallel = [:]
     String regexString = '(' + listOfDownstreamJobs.replaceAll(',', '|') + ')'
 
     j = jobs(regexString)
