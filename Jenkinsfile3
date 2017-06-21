@@ -8,17 +8,12 @@ node{
         echo "\u2776 Build Step"
         sh 'mvn clean compile'
     }
-    stage('\u2777 Test'){
-        echo "\u2777 Test Step"
-        sh 'mvn test'
-        junit '**/target/surefire-reports/TEST-*.xml'
-    }
-    stage('\u2778 Deploy Artifact') {
-        echo "\u2778 Deploy Step"
+    stage('\u2777 Deploy Artifact') {
+        echo "\u2777 Deploy Step"
         sh 'mvn deploy -DskipTests'
     }
-    stage('\u2779 Trigger Downstreams') {
-        echo "\u2779 Trigger Downstreams"
+    stage('\u2778 Trigger Downstreams') {
+        echo "\u2778 Trigger Downstreams"
         if (DOWNSTREAMS != null) {
             def stepsForParallel = getParallelStepsForDownstreamJobs(DOWNSTREAMS)
             parallel stepsForParallel

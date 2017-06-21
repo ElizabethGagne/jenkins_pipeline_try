@@ -3,7 +3,7 @@ microservices {
     url = 'https://github.com/tek-mayo-jaguar/jaguar-parent.git'
     branch = 'develop'
     group = 'starter'
-    scriptfile = 'Jenkinsfile2'
+    scriptfile = 'Jenkinsfile3'
     description = 'parent for every starters'
     downstreams = 'saml_starter'
   }
