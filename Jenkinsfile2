@@ -1,35 +1,3 @@
-import jenkins.model.*
-
-def stepsForParallel = [:]
-
-// Since this method uses grep/collect it needs to be annotated with @NonCPS
-// It returns a simple string map so the workflow can be serialized
-@NonCPS
-def jobs(jobRegexp) {
-  Jenkins.instance.getAllItems()
-         .grep { it.name ==~ ~"${jobRegexp}"  }
-         .collect { [ name : it.name.toString(),
-                      fullName : it.fullName.toString() ] }
-}
-
-j = jobs('saml_starter')
-for (int i=0; i < j.size(); i++) {
-    stepsForParallel["${j[i].name}"] = transformIntoStep(j[i].fullName)
-}
-
-// Take the string and echo it.
-def transformIntoStep(jobFullName) {
-    // We need to wrap what we return in a Groovy closure, or else it's invoked
-    // when this method is called, not when we pass it to parallel.
-    // To do this, you need to wrap the code below in { }, and either return
-    // that explicitly, or use { -> } syntax.
-    return {
-       // Job parameters can be added to this step
-       build jobFullName
-    }
-}
-
-
 node{
 
     git url: GIT_URL, branch: GIT_BRANCH, credentialsId: 'GitHub_Account_Creds'
@@ -51,7 +19,16 @@ node{
     }
     stage('\u2779 Trigger Downstreams') {
         echo "\u2779 Trigger Downstreams"
-        parallel stepsForParallel
+        when {
+            expression {
+               DOWNSTREAMS != null
+            }
+        }
+        steps {
+            def common = load("common.groovy")
+            def stepsForParallel = common.getParallelStepsForDownstreamJobs(DOWNSTREAMS)
+            parallel stepsForParallel
+        }
     }
 
 }
