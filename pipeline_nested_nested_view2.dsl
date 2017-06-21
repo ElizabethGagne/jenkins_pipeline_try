@@ -24,7 +24,7 @@ microservicesByPipelineType.each { type, services ->
             createDeployPipelineJob(name, data)
         }
 
-        def microservicesByGroup = services.groupBy { name,data -> data.group }
+        def microservicesByGroup = services.groupBy { name,data -> data.environment }
         createView('Deploy Pipeline', 'Shows the service deploy pipelines', microservicesByGroup)
     }
 }

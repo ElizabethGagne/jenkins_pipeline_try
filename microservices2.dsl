@@ -20,6 +20,7 @@ microservices {
   consumer_web_qa {
     pipeline_type = 'deploy'
     group = 'webapp'
+    environment = 'qa'
     script_file = 'Jenkinsfile4'
     description = 'consumer webapp qa deployement pipeline'
     maven {
