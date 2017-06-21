@@ -81,7 +81,7 @@ def createView(viewName, viewDescription, microservicesByGroup) {
              def service_names_list = services.keySet() as List
              def innerNestedView = delegate
              innerNestedView.listView(group) {
-                description("Shows the service " + group + " pipelines')
+                description("Shows the service " + group + " pipelines")
                 columns {
                     status()
                     weather()
