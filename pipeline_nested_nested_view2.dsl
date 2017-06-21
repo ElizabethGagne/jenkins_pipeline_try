@@ -3,21 +3,29 @@ def slurper = new ConfigSlurper()
 slurper.classLoader = this.class.classLoader
 def config = slurper.parse(readFileFromWorkspace('microservices2.dsl'))
 
+// create jobs and views for the microservices
 def microservicesByPipelineType = config.microservices.groupBy { name, data -> data.pipeline_type }
-
 microservicesByPipelineType.each { type, services ->
     if (type == 'build') {
-        // create job for every microservice
+
+         // create job for every microservice
          services.each { name, data ->
             createBuildPipelineJob(name, data)
          }
 
-         println "creating ${type} pipeline job " + services
+         // create view by services group
+         def microservicesByGroup = services.groupBy { name,data -> data.group }
+         createView('Build Pipeline', 'Shows the service build pipelines', microservicesByGroup)
+
     } else {
+
         // create job for every microservice
         services.each { name, data ->
             createDeployPipelineJob(name, data)
         }
+
+        def microservicesByGroup = services.groupBy { name,data -> data.group }
+        createView('Deploy Pipeline', 'Shows the service deploy pipelines', microservicesByGroup)
     }
 }
 
@@ -60,6 +68,39 @@ microservicesByPipelineType.each { type, services ->
 //   }
 //}
 
+
+def createView(name, description, microservicesByGroup) {
+    nestedView(name) {
+       description(description)
+       columns {
+          status()
+          weather()
+       }
+       views {
+          microservicesByGroup.each { group, services ->
+             def service_names_list = services.keySet() as List
+             def innerNestedView = delegate
+             innerNestedView.listView(group) {
+                description('Shows the service build pipelines')
+                columns {
+                    status()
+                    weather()
+                    name()
+                    lastSuccess()
+                    lastFailure()
+                    lastDuration()
+                    buildButton()
+                }
+                jobs {
+                   service_names_list.each{service_name ->
+                     name(service_name)
+                   }
+                }
+             }
+          }
+       }
+    }
+}
 
 def createBuildPipelineJob(name, data ) {
     pipelineJob(name) {
