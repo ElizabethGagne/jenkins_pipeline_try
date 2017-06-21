@@ -69,9 +69,9 @@ microservicesByPipelineType.each { type, services ->
 //}
 
 
-def createView(name, description, microservicesByGroup) {
-    nestedView(name) {
-       description(description)
+def createView(viewName, viewDescription, microservicesByGroup) {
+    nestedView(viewName) {
+       description(viewDescription)
        columns {
           status()
           weather()
