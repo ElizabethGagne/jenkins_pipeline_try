@@ -63,7 +63,7 @@ microservicesByPipelineType.each { type, services ->
 
 def createBuildPipelineJob(name, data ) {
     pipelineJob(name) {
-        println "creating build pipeline job ${name} with description " + data.description
+        println "creating build pipeline job ${name} with description '" + data.description + "'"
         description(data.description)
 
         scm {
@@ -110,7 +110,6 @@ def createDeployPipelineJob(name, data ) {
             stringParam('MAVEN_ARTIFACT', data.maven.artifact, 'Maven Artifact Name')
             stringParam('MAVEN_EXTENSION', data.maven.extension, 'Maven Artifact Extension')
             stringParam('MAVEN_VERSION', data.maven.version, 'Maven Artifact Version')
-            stringParam('DOWNSTREAMS' , data.downstreams, 'Comma Separated List of Downstream Jobs To Trigger')
         }
 
         def runScript = readFileFromWorkspace(data.script_file)
