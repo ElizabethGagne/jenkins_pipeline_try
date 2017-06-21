@@ -26,6 +26,7 @@ microservices {
         group = 'edu.mayo.jaguar'
         artifact = 'jaguar-saml-starter'
         extension = 'jar'
+        version = '1.0.1-SNAPSHOT'
     }
   }
 }

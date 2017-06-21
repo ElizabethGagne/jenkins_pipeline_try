@@ -7,9 +7,17 @@ def microservicesByPipelineType = config.microservices.groupBy { name, data -> d
 
 microservicesByPipelineType.each { type, services ->
     if (type == 'build') {
+        // create job for every microservice
+         services.each { name, data ->
+            createBuildPipelineJob(name, data)
+         }
+
          println "creating ${type} pipeline job " + services
     } else {
-
+        // create job for every microservice
+        services.each { name, data ->
+            createDeployPipelineJob(name, data)
+        }
     }
 }
 
