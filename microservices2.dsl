@@ -1,11 +1,11 @@
 microservices {
   parent {
-    url = 'https://github.com/tek-mayo-jaguar/jenkins_pipeline_try.git'
-    branch = 'master'
+    url = 'https://github.com/tek-mayo-jaguar/jaguar-parent.git'
+    branch = 'develop'
     group = 'starter'
-    scriptfile = 'Jenkinsfile'
-    description = 'base component for consumer'
-    downstreams = 'consumer_web'
+    scriptfile = 'Jenkinsfile2'
+    description = 'parent for every starters'
+    downstreams = 'saml_starter'
   }
   saml_starter {
     url = 'https://github.com/tek-mayo-jaguar/jaguar-saml-starter.git'
