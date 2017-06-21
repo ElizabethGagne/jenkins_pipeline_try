@@ -8,7 +8,7 @@ def microservicesByPipelineType = config.microservices.groupBy { name, data -> d
 microservicesByPipelineType.each { type, services ->
     if (type == 'build') {
 
-         // create job for every microservice
+         // create job for every microservices
          services.each { name, data ->
             createBuildPipelineJob(name, data)
          }
@@ -19,11 +19,12 @@ microservicesByPipelineType.each { type, services ->
 
     } else {
 
-        // create job for every microservice
+        // create job for every microservices
         services.each { name, data ->
             createDeployPipelineJob(name, data)
         }
 
+        // create view by services environment
         def microservicesByGroup = services.groupBy { name,data -> data.environment }
         createView('Deploy Pipeline', 'Shows the service deploy pipelines', microservicesByGroup)
     }

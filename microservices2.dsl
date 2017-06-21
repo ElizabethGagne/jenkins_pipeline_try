@@ -30,4 +30,17 @@ microservices {
         version = '1.0.1-SNAPSHOT'
     }
   }
+  consumer_web_prod {
+      pipeline_type = 'deploy'
+      group = 'webapp'
+      environment = 'prod'
+      script_file = 'Jenkinsfile4'
+      description = 'consumer webapp prod deployement pipeline'
+      maven {
+          group = 'edu.mayo.jaguar'
+          artifact = 'jaguar-saml-starter'
+          extension = 'jar'
+          version = '1.0.1-SNAPSHOT'
+      }
+    }
 }
