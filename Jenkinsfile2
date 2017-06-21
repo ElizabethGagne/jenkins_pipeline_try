@@ -5,13 +5,12 @@ node{
     stage('\u2776 Build') {
         echo "\u2776 Build Step"
         sh 'mvn clean compile'
-        //step([$class: 'ArtifactArchiver', artifacts: '**/target/*.jar', fingerprint: true])
     }
     stage('\u2777 Test'){
         echo "\u2777 Test Step"
         sh 'mvn test'
-        junit '**/target/surefire-reports/TEST-*.xml'
-        //step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+        //junit '**/target/surefire-reports/TEST-*.xml'
+        step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
     }
     stage('\u2778 Deploy Artifact') {
         echo "\u2778 Deploy Step"
@@ -19,14 +18,8 @@ node{
     }
     stage('\u2779 Trigger Downstreams') {
         echo "\u2779 Trigger Downstreams"
-        when {
-            expression {
-               DOWNSTREAMS != null
-            }
-        }
-        steps {
-            def common = load("common.groovy")
-            def stepsForParallel = common.getParallelStepsForDownstreamJobs(DOWNSTREAMS)
+        if (DOWNSTREAMS != null) {
+            def stepsForParallel = getParallelStepsForDownstreamJobs(DOWNSTREAMS)
             parallel stepsForParallel
         }
     }

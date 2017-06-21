@@ -67,14 +67,15 @@ def createPipelineJob(name, data ) {
         parameters {
             stringParam('GIT_URL', data.url, 'Git Url of the project to build')
             stringParam('GIT_BRANCH', data.branch, 'Git Branch to pick')
-            stringParam('DOWNSTREAMS' , data.downstreams, 'Downstream Jobs To Trigger')
+            stringParam('DOWNSTREAMS' , data.downstreams, 'Comma Separated List of Downstream Jobs To Trigger')
         }
 
         def runScript = readFileFromWorkspace(data.scriptfile)
+        def commonScript = readFileFromWorkspace('jobs/common.groovy')
 
         definition {
             cps {
-                script(runScript)
+                script(runScript + commonScript)
             }
         }
     }
