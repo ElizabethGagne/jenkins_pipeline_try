@@ -71,7 +71,7 @@ def createPipelineJob(name, data ) {
         }
 
         def runScript = readFileFromWorkspace(data.scriptfile)
-        def commonScript = readFileFromWorkspace('jobs/common.groovy')
+        def commonScript = readFileFromWorkspace('common.groovy')
 
         definition {
             cps {
