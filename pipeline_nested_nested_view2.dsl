@@ -68,15 +68,6 @@ def createPipelineJob(name, data ) {
             stringParam('GIT_URL', data.url, 'Git Url of the project to build')
             stringParam('GIT_BRANCH', data.branch, 'Git Branch to pick')
             stringParam('DOWNSTREAMS' , data.downstreams, 'Comma Separated List of Downstream Jobs To Trigger')
-            activeChoiceParam('CHOICE1') {
-                description('Allows user choose from multiple choices')
-                filterable()
-                choiceType('SINGLE_SELECT')
-                groovyScript {
-                    script('')
-                    fallbackScript('')
-                }
-            }
         }
 
         def runScript = readFileFromWorkspace(data.scriptfile)
