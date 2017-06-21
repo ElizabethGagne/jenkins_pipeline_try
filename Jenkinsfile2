@@ -16,6 +16,7 @@ node{
     stage('\u2778 Deploy Artifact') {
         echo "\u2778 Deploy Step"
         sh 'mvn deploy -DskipTests'
+        step([$class: 'WsCleanup'])
     }
     stage('\u2779 Trigger Downstreams') {
         echo "\u2779 Trigger Downstreams"

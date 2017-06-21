@@ -97,10 +97,6 @@ def createBuildPipelineJob(name, data ) {
                 script(runScript + commonScript)
             }
         }
-
-        publishers {
-            wsCleanup()
-        }
     }
 }
 
@@ -125,10 +121,6 @@ def createDeployPipelineJob(name, data ) {
             cps {
                 script(runScript + commonScript)
             }
-        }
-
-        publishers {
-            wsCleanup()
         }
     }
 }
