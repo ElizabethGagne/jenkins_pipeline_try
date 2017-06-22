@@ -1,6 +1,11 @@
 String gitUrl = 'https://github.com/ElizabethGagne/jenkins_pipeline_try.git'
+String mainFolder = 'POC'
 
-job("seed") {
+folder("$mainFolder") {
+    description 'POC Folder'
+}
+
+job("$mainFolder/seed") {
     scm {
         git{
             remote {

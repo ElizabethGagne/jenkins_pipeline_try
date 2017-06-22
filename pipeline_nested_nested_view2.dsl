@@ -75,7 +75,7 @@ def getAllBranchesForRepo(credId, project) {
 
 def createBuildPipelineJobsForAllBranches(name, data) {
     def jobNames = []
-    def result = getAllBranchesForRepo(data.credId, data.project)
+    def result = getAllBranchesForRepo(data.git.credId, data.git.project)
     result.each{ branchName ->
         def jobName = "${name}-${branchName}".replaceAll('/','-')
         jobNames << jobName
@@ -127,7 +127,7 @@ def createViewPerService(viewName, viewDescription, microservicesByGroup, jobsFo
         }
         views {
             microservicesByGroup.each { group, services ->
-              	def innerNestedView = delegate
+                def innerNestedView = delegate
                 innerNestedView.nestedView(group) {
                     description("Shows the service group" + group + " pipelines")
                     columns {
@@ -164,7 +164,7 @@ def createViewPerService(viewName, viewDescription, microservicesByGroup, jobsFo
 }
 
 def createBuildPipelineJob(name, branchName, data ) {
-    pipelineJob(name) {
+    pipelineJob(data.folder + '/' + name) {
         println "creating build pipeline job ${name} with description '" + data.description + "'"
         description(data.description)
 
@@ -187,7 +187,7 @@ def createBuildPipelineJob(name, branchName, data ) {
             stringParam('GIT_URL', data.git.url, 'Git Url of the project to build')
             stringParam('GIT_BRANCH', branchName, 'Git Branch to pick')
             stringParam('GIT_CRED_ID', 'data.git.credId', 'Jenkins Credentials Id used to fetch git account credentials')
-            stringParam('DOWNSTREAMS' , data.downstreams, 'Comma Separated List of Downstream Jobs To Trigger')
+            stringParam('DOWNSTREAMS' , data.downstreams, 'Comma Separated List of Downstream Services To Trigger')
         }
 
         def runScript = readFileFromWorkspace(data.script_file)
@@ -202,7 +202,7 @@ def createBuildPipelineJob(name, branchName, data ) {
 }
 
 def createDeployPipelineJob(name, data ) {
-    pipelineJob(name) {
+    pipelineJob(data.folder + '/' + name) {
         println "creating deploy pipeline job ${name} with description '" + data.description + "'"
         description(data.description)
 

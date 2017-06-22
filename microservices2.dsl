@@ -10,6 +10,7 @@ microservices {
     script_file = 'Jenkinsfile3'
     description = 'parent for starters build pipeline'
     downstreams = 'saml_starter'
+    folder = 'POC'
   }
   saml_starter {
     git {
@@ -22,6 +23,7 @@ microservices {
     script_file = 'Jenkinsfile2'
     description = 'saml starter build pipeline'
     downstreams = ''
+    folder = 'POC'
   }
   consumer_web_qa {
     pipeline_type = 'deploy'
@@ -35,5 +37,6 @@ microservices {
         extension = 'jar'
         version = '1.0.1-SNAPSHOT'
     }
+    folder = 'POC'
   }
 }
