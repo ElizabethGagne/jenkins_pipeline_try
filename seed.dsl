@@ -1,15 +1,19 @@
-String gitUrl = 'https://github.com/ElizabethGagne/jenkins_pipeline_try.git'
-String mainFolder = 'POC'
+import jenkins.model.*
 
-folder("$mainFolder") {
-    description 'POC Folder'
+def slurper = new ConfigSlurper()
+// fix classloader problem using ConfigSlurper in job dsl
+slurper.classLoader = this.class.classLoader
+def config = slurper.parse(readFileFromWorkspace('config.dsl'))
+
+folder(config.jenkins.folder.name) {
+    description(config.jenkins.folder.description)
 }
 
-job("$mainFolder/seed") {
+job(config.jenkins.folder.name + "/seed") {
     scm {
         git{
             remote {
-                url("$gitUrl")
+                url(config.jenkins.seed.gitUrl)
             }
             branch('master')
         }
@@ -22,6 +26,7 @@ job("$mainFolder/seed") {
             external('pipeline_nested_nested_view2.dsl')
             additionalClasspath('src/main/groovy')
             removeAction('DELETE')
+            removeViewAction('DELETE')
         }
     }
 }

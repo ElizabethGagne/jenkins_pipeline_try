@@ -4,6 +4,8 @@ def slurper = new ConfigSlurper()
 // fix classloader problem using ConfigSlurper in job dsl
 slurper.classLoader = this.class.classLoader
 def config = slurper.parse(readFileFromWorkspace('microservices2.dsl'))
+def jenkins_config = slurper.parse(readFileFromWorkspace('config.dsl'))
+def folder = jenkins_config.jenkins.folder.name
 
 // create jobs and views for the microservices
 def microservicesByPipelineType = config.microservices.groupBy { name, data -> data.pipeline_type }
@@ -19,7 +21,7 @@ microservicesByPipelineType.each { type, services ->
 
          // create view by services group
          def microservicesByGroup = services.groupBy { name,data -> data.group }
-         createViewPerService('Build Pipeline', 'Shows the service build pipelines', microservicesByGroup, jobsForEachService)
+         createViewPerService(folder + '/Build Pipeline', 'Shows the service build pipelines', microservicesByGroup, jobsForEachService)
 
     } else {
 
@@ -30,7 +32,7 @@ microservicesByPipelineType.each { type, services ->
 
         // create view by services environment
         def microservicesByGroup = services.groupBy { name,data -> data.environment }
-        createViewPerEnvironment('Deploy Pipeline', 'Shows the service deploy pipelines', microservicesByGroup)
+        createViewPerEnvironment(folder + /Deploy Pipeline', 'Shows the service deploy pipelines', microservicesByGroup)
     }
 }
 
@@ -186,7 +188,7 @@ def createBuildPipelineJob(name, branchName, data ) {
         parameters {
             stringParam('GIT_URL', data.git.url, 'Git Url of the project to build')
             stringParam('GIT_BRANCH', branchName, 'Git Branch to pick')
-            stringParam('GIT_CRED_ID', 'data.git.credId', 'Jenkins Credentials Id used to fetch git account credentials')
+            stringParam('GIT_CRED_ID', data.git.credId, 'Jenkins Credentials Id used to fetch git account credentials')
             stringParam('DOWNSTREAMS' , data.downstreams, 'Comma Separated List of Downstream Services To Trigger')
         }
 
