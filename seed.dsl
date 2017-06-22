@@ -2,7 +2,12 @@ String gitUrl = 'https://github.com/ElizabethGagne/jenkins_pipeline_try.git'
 
 job("seed") {
     scm {
-        git("$gitUrl")
+        git{
+            remote {
+                url("$gitUrl")
+            }
+            branch('master'
+        }
     }
     triggers {
         scm 'H/5 * * * *'
