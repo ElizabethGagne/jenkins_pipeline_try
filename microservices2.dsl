@@ -1,8 +1,10 @@
 microservices {
   parent {
-    url = 'https://github.com/tek-mayo-jaguar/jaguar-parent.git'
-    project = 'tek-mayo-jaguar/jaguar-parent'
-    credId = 'GitHub_Account_Creds'
+    git {
+        url = 'https://github.com/tek-mayo-jaguar/jaguar-parent.git'
+        project = 'tek-mayo-jaguar/jaguar-parent'
+        credId = 'GitHub_Account_Creds'
+    }
     pipeline_type = 'build'
     group = 'starter'
     script_file = 'Jenkinsfile3'
@@ -10,9 +12,11 @@ microservices {
     downstreams = 'saml_starter'
   }
   saml_starter {
-    url = 'https://github.com/tek-mayo-jaguar/jaguar-saml-starter.git'
-    project = 'tek-mayo-jaguar/jaguar-saml-starter'
-    credId = 'GitHub_Account_Creds'
+    git {
+        url = 'https://github.com/tek-mayo-jaguar/jaguar-saml-starter.git'
+        project = 'tek-mayo-jaguar/jaguar-saml-starter'
+        credId = 'GitHub_Account_Creds'
+    }
     pipeline_type = 'build'
     group = 'starter'
     script_file = 'Jenkinsfile2'

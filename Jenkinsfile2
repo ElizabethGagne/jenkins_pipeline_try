@@ -2,7 +2,7 @@ import jenkins.model.*
 
 node{
 
-    git url: GIT_URL, branch: GIT_BRANCH, credentialsId: 'GitHub_Account_Creds'
+    git url: GIT_URL, branch: GIT_BRANCH, credentialsId: GIT_CRED_ID
 
     stage('\u2776 Build') {
         echo "\u2776 Build Step"
