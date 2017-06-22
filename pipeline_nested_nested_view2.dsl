@@ -186,7 +186,7 @@ def createBuildPipelineJob(name, branchName, data ) {
         parameters {
             stringParam('GIT_URL', data.git.url, 'Git Url of the project to build')
             stringParam('GIT_BRANCH', branchName, 'Git Branch to pick')
-            stringParam('GIT_CRED_ID', 'data.git.credId', 'Jenkins Credentials Id used to fetch git account credentials'
+            stringParam('GIT_CRED_ID', 'data.git.credId', 'Jenkins Credentials Id used to fetch git account credentials')
             stringParam('DOWNSTREAMS' , data.downstreams, 'Comma Separated List of Downstream Jobs To Trigger')
         }
 
