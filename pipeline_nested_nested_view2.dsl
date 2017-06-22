@@ -8,14 +8,14 @@ def microservicesByPipelineType = config.microservices.groupBy { name, data -> d
 microservicesByPipelineType.each { type, services ->
     if (type == 'build') {
 
-         // create job for every microservices
+         // create jobs for every microservices/branches
          services.each { name, data ->
-            createBuildPipelineJob(name, data)
+            createBuildPipelineJobsForAllBranches(name, data)
          }
 
          // create view by services group
-         def microservicesByGroup = services.groupBy { name,data -> data.group }
-         createView('Build Pipeline', 'Shows the service build pipelines', microservicesByGroup)
+         //def microservicesByGroup = services.groupBy { name,data -> data.group }
+         //createView('Build Pipeline', 'Shows the service build pipelines', microservicesByGroup)
 
     } else {
 
@@ -31,18 +31,54 @@ microservicesByPipelineType.each { type, services ->
 }
 
 
-//def project = 'tek-mayo-jaguar/employee-web'
-//def branchApi = new URL("https://api.github.com/repos/${project}/branches")
-//def branches = new groovy.json.JsonSlurper().parse(branchApi.newReader())
-//branches.each {
-//    println "branch ${it.name} exist for project ${project}"
-//}
+def getCredentials(credId) {
+    def creds = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials(
+      com.cloudbees.plugins.credentials.common.StandardUsernameCredentials.class,
+      Jenkins.instance,
+      null,
+      null
+    );
 
-def sout = new StringBuilder(), serr = new StringBuilder()
-def proc = 'git ls-remote --heads https://github.com/tek-mayo-jaguar/batch-manager'.execute()
-proc.consumeProcessOutput(sout, serr)
-proc.waitForOrKill(1000)
-println "out> $sout err> $serr"
+    def username = ""
+    def password = ""
+
+    for (c in creds) {
+      if (c.id == credId) {
+        username = c.username
+        password = c.password
+      }
+    }
+
+    return [username,password]
+}
+
+def getAllBranchesForRepo(credId, project) {
+    def branches = []
+
+    (username,password) = getCredentials(credId)
+
+    def pattern = "(develop|master|.*iteration.*)"
+    def process = "git ls-remote --heads https://${username}:${password}@github.com/${project}".execute()
+    process.text.eachLine {
+      def branch = it.split(/refs\/heads\//)[1]
+
+      if (branch ==~ ~pattern) {
+        branches << branch
+      }
+    }
+    return branches.toList()
+}
+
+def createBuildPipelineJobsForAllBranches(name, data) {
+    def jobNames = []
+    def result = getAllBranchesForRepo(data.credId, data.project)
+    result.each{ branchName ->
+        def jobName = "${name}_${branchName}".replaceAll('/','_')
+        jobNames << jobName
+        createBuildPipelineJob(jobName, data)
+    }
+    return jobNames
+}
 
 def createView(viewName, viewDescription, microservicesByGroup) {
     nestedView(viewName) {
@@ -77,7 +113,7 @@ def createView(viewName, viewDescription, microservicesByGroup) {
     }
 }
 
-def createBuildPipelineJob(name, data ) {
+def createBuildPipelineJob(name, branchName, data ) {
     pipelineJob(name) {
         println "creating build pipeline job ${name} with description '" + data.description + "'"
         description(data.description)
@@ -86,9 +122,9 @@ def createBuildPipelineJob(name, data ) {
             git {
                 remote {
                   url(data.url)
-                  credentials('GitHub_Account_Creds')
+                  credentials(data.credId)
                 }
-                branch(data.branch)
+                branch(branchName)
             }
         }
 
@@ -99,7 +135,7 @@ def createBuildPipelineJob(name, data ) {
 
         parameters {
             stringParam('GIT_URL', data.url, 'Git Url of the project to build')
-            stringParam('GIT_BRANCH', data.branch, 'Git Branch to pick')
+            stringParam('GIT_BRANCH', branchName, 'Git Branch to pick')
             stringParam('DOWNSTREAMS' , data.downstreams, 'Comma Separated List of Downstream Jobs To Trigger')
         }
 
