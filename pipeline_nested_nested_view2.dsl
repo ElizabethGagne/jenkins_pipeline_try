@@ -10,14 +10,16 @@ def microservicesByPipelineType = config.microservices.groupBy { name, data -> d
 microservicesByPipelineType.each { type, services ->
     if (type == 'build') {
 
+         def jobsForEachService = [:]
+
          // create jobs for every microservices/branches
          services.each { name, data ->
-            createBuildPipelineJobsForAllBranches(name, data)
+            jobsForEachService[name] = createBuildPipelineJobsForAllBranches(name, data)
          }
 
          // create view by services group
-         //def microservicesByGroup = services.groupBy { name,data -> data.group }
-         //createView('Build Pipeline', 'Shows the service build pipelines', microservicesByGroup)
+         def microservicesByGroup = services.groupBy { name,data -> data.group }
+         createViewPerService('Build Pipeline', 'Shows the service build pipelines', microservicesByGroup, jobsForEachService)
 
     } else {
 
@@ -28,7 +30,7 @@ microservicesByPipelineType.each { type, services ->
 
         // create view by services environment
         def microservicesByGroup = services.groupBy { name,data -> data.environment }
-        createView('Deploy Pipeline', 'Shows the service deploy pipelines', microservicesByGroup)
+        createViewPerEnvironment('Deploy Pipeline', 'Shows the service deploy pipelines', microservicesByGroup)
     }
 }
 
@@ -82,7 +84,7 @@ def createBuildPipelineJobsForAllBranches(name, data) {
     return jobNames
 }
 
-def createView(viewName, viewDescription, microservicesByGroup) {
+def createViewPerEnvironment(viewName, viewDescription, microservicesByGroup) {
     nestedView(viewName) {
        description(viewDescription)
        columns {
@@ -112,6 +114,52 @@ def createView(viewName, viewDescription, microservicesByGroup) {
              }
           }
        }
+    }
+}
+
+def createViewPerService(viewName, viewDescription, microservicesByGroup, jobsForEachService) {
+
+    nestedView(viewName) {
+        description(viewDescription)
+        columns {
+            status()
+            weather()
+        }
+        views {
+            microservicesByGroup.each { group, services ->
+              	def innerNestedView = delegate
+                innerNestedView.nestedView(group) {
+                    description("Shows the service group" + group + " pipelines")
+                    columns {
+                        status()
+                        weather()
+                    }
+                    views {
+                        def innerNestedView2 = delegate
+                        services.each { service_name, data ->
+                            def jobs_list = jobsForEachService[service_name]
+                            innerNestedView2.listView(service_name) {
+                                description("Shows the service name " + service_name + " pipelines")
+                                columns {
+                                    status()
+                                    weather()
+                                    name()
+                                    lastSuccess()
+                                    lastFailure()
+                                    lastDuration()
+                                    buildButton()
+                                }
+                                jobs {
+                                   jobs_list.each{job_name ->
+                                     name(job_name)
+                                   }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
