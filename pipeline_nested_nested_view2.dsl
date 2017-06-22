@@ -31,12 +31,18 @@ microservicesByPipelineType.each { type, services ->
 }
 
 
-def project = 'tek-mayo-jaguar/employee-web'
-def branchApi = new URL("https://api.github.com/repos/${project}/branches")
-def branches = new groovy.json.JsonSlurper().parse(branchApi.newReader())
-branches.each {
-    println "branch ${it.name} exist for project ${project}"
-}
+//def project = 'tek-mayo-jaguar/employee-web'
+//def branchApi = new URL("https://api.github.com/repos/${project}/branches")
+//def branches = new groovy.json.JsonSlurper().parse(branchApi.newReader())
+//branches.each {
+//    println "branch ${it.name} exist for project ${project}"
+//}
+
+def sout = new StringBuilder(), serr = new StringBuilder()
+def proc = 'git ls-remote --heads https://github.com/tek-mayo-jaguar/batch-manager'.execute()
+proc.consumeProcessOutput(sout, serr)
+proc.waitForOrKill(1000)
+println "out> $sout err> $serr"
 
 def createView(viewName, viewDescription, microservicesByGroup) {
     nestedView(viewName) {
