@@ -8,6 +8,7 @@ node{
     }
     stage('\u2777 Deploy To Azure') {
         echo "\u2777 Deploy Step"
+        step([$class: 'WsCleanup'])
     }
 
 }
