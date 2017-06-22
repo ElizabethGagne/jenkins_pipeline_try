@@ -9,7 +9,7 @@ microservices {
     description = 'parent for starters build pipeline'
     downstreams = 'saml_starter'
   }
-  saml_starter {
+  saml-starter {
     url = 'https://github.com/tek-mayo-jaguar/jaguar-saml-starter.git'
     project = 'tek-mayo-jaguar/jaguar-saml-starter'
     credId = 'GitHub_Account_Creds'
@@ -19,7 +19,7 @@ microservices {
     description = 'saml starter build pipeline'
     downstreams = ''
   }
-  consumer_web_qa {
+  consumer-web-qa {
     pipeline_type = 'deploy'
     group = 'webapp'
     environment = 'qa'

@@ -1,3 +1,5 @@
+import jenkins.model.*
+
 def slurper = new ConfigSlurper()
 // fix classloader problem using ConfigSlurper in job dsl
 slurper.classLoader = this.class.classLoader
@@ -73,9 +75,9 @@ def createBuildPipelineJobsForAllBranches(name, data) {
     def jobNames = []
     def result = getAllBranchesForRepo(data.credId, data.project)
     result.each{ branchName ->
-        def jobName = "${name}_${branchName}".replaceAll('/','_')
+        def jobName = "${name}-${branchName}".replaceAll('/','-')
         jobNames << jobName
-        createBuildPipelineJob(jobName, data)
+        createBuildPipelineJob(jobName,branchName, data)
     }
     return jobNames
 }
@@ -174,6 +176,3 @@ def createDeployPipelineJob(name, data ) {
         }
     }
 }
-
-
-
