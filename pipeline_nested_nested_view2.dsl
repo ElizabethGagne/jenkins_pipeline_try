@@ -32,7 +32,7 @@ microservicesByPipelineType.each { type, services ->
 
         // create view by services environment
         def microservicesByGroup = services.groupBy { name,data -> data.environment }
-        createViewPerEnvironment(folder + /Deploy Pipeline', 'Shows the service deploy pipelines', microservicesByGroup)
+        createViewPerEnvironment(folder + '/Deploy Pipeline', 'Shows the service deploy pipelines', microservicesByGroup)
     }
 }
 
@@ -98,7 +98,7 @@ def createViewPerEnvironment(viewName, viewDescription, microservicesByGroup) {
              def service_names_list = services.keySet() as List
              def innerNestedView = delegate
              innerNestedView.listView(group) {
-                description("Shows the service " + group + " pipelines")
+                description("Shows the service '" + group + "' pipelines")
                 columns {
                     status()
                     weather()
@@ -131,7 +131,7 @@ def createViewPerService(viewName, viewDescription, microservicesByGroup, jobsFo
             microservicesByGroup.each { group, services ->
                 def innerNestedView = delegate
                 innerNestedView.nestedView(group) {
-                    description("Shows the service group" + group + " pipelines")
+                    description("Shows the service group '" + group + "' pipelines")
                     columns {
                         status()
                         weather()
@@ -141,7 +141,7 @@ def createViewPerService(viewName, viewDescription, microservicesByGroup, jobsFo
                         services.each { service_name, data ->
                             def jobs_list = jobsForEachService[service_name]
                             innerNestedView2.listView(service_name) {
-                                description("Shows the service name " + service_name + " pipelines")
+                                description("Shows the service name '" + service_name + "' pipelines")
                                 columns {
                                     status()
                                     weather()
