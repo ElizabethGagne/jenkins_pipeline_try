@@ -6,7 +6,7 @@ job("seed") {
             remote {
                 url("$gitUrl")
             }
-            branch('master'
+            branch('master')
         }
     }
     triggers {
