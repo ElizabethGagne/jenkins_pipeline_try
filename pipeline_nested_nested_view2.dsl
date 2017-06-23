@@ -169,6 +169,11 @@ def createBuildPipelineJob(name, branchName, data ) {
         println "creating build pipeline job ${name} with description '" + data.description + "'"
         description(data.description)
 
+        logRotator {
+            numToKeep(10)
+            artifactNumToKeep(10)
+        }
+
         scm {
             git {
                 remote {
@@ -206,6 +211,11 @@ def createDeployPipelineJob(name, data ) {
     pipelineJob(data.folder + '/' + name) {
         println "creating deploy pipeline job ${name} with description '" + data.description + "'"
         description(data.description)
+
+        logRotator {
+            numToKeep(100)
+            artifactNumToKeep(100)
+        }
 
         concurrentBuild(false)
 

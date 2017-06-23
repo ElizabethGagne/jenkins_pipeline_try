@@ -10,6 +10,11 @@ folder(config.jenkins.folder.name) {
 }
 
 job(config.jenkins.folder.name + "/seed") {
+
+    logRotator {
+        numToKeep(10)
+        artifactNumToKeep(10)
+    }
     scm {
         git{
             remote {
