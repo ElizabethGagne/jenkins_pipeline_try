@@ -21,8 +21,7 @@ microservicesByPipelineType.each { type, services ->
 
          // create view by services group
          def microservicesByGroup = services.groupBy { name,data -> data.group }
-         //createViewPerService(folder + '/Build Pipeline', 'Shows the service build pipelines', microservicesByGroup, jobsForEachService)
-         createViewPerService('Build Pipeline', 'Shows the service build pipelines', microservicesByGroup, jobsForEachService)
+         createViewPerService(folder + '/Build Pipeline', 'Shows the service build pipelines', microservicesByGroup, jobsForEachService)
     } else {
 
         // create job for every microservices
@@ -32,8 +31,7 @@ microservicesByPipelineType.each { type, services ->
 
         // create view by services environment
         def microservicesByGroup = services.groupBy { name,data -> data.environment }
-        //createViewPerEnvironment(folder + '/Deploy Pipeline', 'Shows the service deploy pipelines', microservicesByGroup)
-        createViewPerEnvironment('Deploy Pipeline', 'Shows the service deploy pipelines', microservicesByGroup)
+        createViewPerEnvironment(folder + '/Deploy Pipeline', 'Shows the service deploy pipelines', microservicesByGroup)
     }
 }
 
@@ -167,8 +165,7 @@ def createViewPerService(viewName, viewDescription, microservicesByGroup, jobsFo
 }
 
 def createBuildPipelineJob(name, branchName, data ) {
-    //pipelineJob(data.folder + '/' + name) {
-    pipelineJob(name) {
+    pipelineJob(data.folder + '/' + name) {
         println "creating build pipeline job ${name} with description '" + data.description + "'"
         description(data.description)
 
@@ -206,8 +203,7 @@ def createBuildPipelineJob(name, branchName, data ) {
 }
 
 def createDeployPipelineJob(name, data ) {
-    //pipelineJob(data.folder + '/' + name) {
-    pipelineJob(name) {
+    pipelineJob(data.folder + '/' + name) {
         println "creating deploy pipeline job ${name} with description '" + data.description + "'"
         description(data.description)
 

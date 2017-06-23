@@ -7,7 +7,6 @@ def jobs(jobRegexp) {
                       fullName : it.fullName.toString() ] }
 }
 
-
 def transformIntoStep(jobFullName) {
     // We need to wrap what we return in a Groovy closure, or else it's invoked
     // when this method is called, not when we pass it to parallel.
@@ -20,16 +19,29 @@ def transformIntoStep(jobFullName) {
 }
 
 // Return a map of jobs of the Downstreams that needed to be called
-def getParallelStepsForDownstreamJobs(listOfDownstreamJobs) {
+def getParallelStepsForDownstreamJobs(String listOfDownstreamServices, String branchName) {
 
     def stepsForParallel = [:]
-    String regexString = '(' + listOfDownstreamJobs.replaceAll(',', '|') + ')'
+    def serviceList = listOfDownstreamServices.tokenize(',')
 
-    j = jobs(regexString)
-    for (int i=0; i < j.size(); i++) {
-        stepsForParallel["${j[i].name}"] = transformIntoStep(j[i].fullName)
+    serviceList.each {
+        String regexString = '(' + it + '-' + branchName + ')'
+        j = jobs(regexString)
+        if (j.size() > 0) {
+            for (int i=0; i < j.size(); i++) {
+                stepsForParallel["${j[i].name}"] = transformIntoStep(j[i].fullName)
+            }
+        }
+        else {
+            if (branchName != 'develop') {
+                regexString = '(' + it + '-develop' + ')'
+                j = jobs(regexString)
+                for (int i=0; i < j.size(); i++) {
+                    stepsForParallel["${j[i].name}"] = transformIntoStep(j[i].fullName)
+                }
+            }
+        }
     }
 
     return stepsForParallel
 }
-

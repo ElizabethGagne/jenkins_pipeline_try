@@ -16,7 +16,7 @@ node{
     stage('\u2778 Trigger Downstreams') {
         echo "\u2778 Trigger Downstreams"
         if (DOWNSTREAMS != null) {
-            def stepsForParallel = getParallelStepsForDownstreamJobs(DOWNSTREAMS)
+            def stepsForParallel = getParallelStepsForDownstreamJobs(DOWNSTREAMS, GIT_BRANCH)
             parallel stepsForParallel
         }
     }

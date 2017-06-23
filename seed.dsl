@@ -5,12 +5,11 @@ def slurper = new ConfigSlurper()
 slurper.classLoader = this.class.classLoader
 def config = slurper.parse(readFileFromWorkspace('config.dsl'))
 
-//folder(config.jenkins.folder.name) {
-//    description(config.jenkins.folder.description)
-//}
+folder(config.jenkins.folder.name) {
+    description(config.jenkins.folder.description)
+}
 
-//job(config.jenkins.folder.name + "/seed") {
-job("seed") {
+job(config.jenkins.folder.name + "/seed") {
     scm {
         git{
             remote {
