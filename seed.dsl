@@ -19,7 +19,7 @@ job(config.jenkins.folder.name + "/seed") {
         }
     }
     triggers {
-        cron(*/10 * * * *)
+        cron '*/10 * * * *'
     }
     steps {
         dsl {
